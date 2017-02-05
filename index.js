@@ -23,8 +23,8 @@ function Hostapdjs(options){
    });
 }
 
-Hostapdjs.prototype.start = function(){ 
-   var options = this.options;
+Hostapdjs.prototype.updateConfig = function(){ 
+  var options = this.options;
 
   var config = {
       path: '/etc/hostapd/hostapd.conf',
@@ -53,7 +53,24 @@ Hostapdjs.prototype.start = function(){
   }
 
   outputFileSync(config.path, createConfig(config), 'utf-8');
-        
+  this.config = config;
+}
+
+var parseHostapdBlock(log){
+	var bits = log.split('\n');
+	console.log(bits);
+}
+
+Hostapdjs.prototype.start = function(){
+  var command = [
+	  'hostapd',
+	  '-B',
+	  this.config.path
+  ].join(' ');
+
+  exec(command, function(err, stdout, stderr){
+	var log = parseHostapdBlock(stdout);
+  });
 }
 
 Hostapdjs.prototype.stop = function(){
@@ -68,41 +85,6 @@ var parseConfig = function(config){
       }
    }
    return write;
-}
-
-function Hostapdjs(options) {
-    var outputFileSync = fs.writeFileSync;
-    return new Promise(function (resolve, reject) {
-
-       if (!pathExists.sync('/etc/default/hostapd')) {
-            reject('no default conf file was founded for hostapd');
-        }
-        if (!options || typeof (options) !== 'object') {
-            reject('Type Error, provide a valid json object');
-        }
-        if (!options.interface) {
-            reject('No configuration interface was provided');
-        }
-        if (!options.ssid) {
-            reject('No configuration ssid was provided');
-        }
-        if (!config.test) {
-            exec('systemctl restart hostapd').then(function () {
-                resolve(config);
-            }).catch(function (err) {
-                console.log(err);
-                reject(err);
-            });
-        }
-        else {
-            exec('echo').then(function () {
-                resolve(config);
-            }).catch(function (err) {
-                console.log(err);
-                reject(err);
-            });
-        }
-    });
 }
 
 Object.defineProperty(exports, "__esModule", { value: true });
