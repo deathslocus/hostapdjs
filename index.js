@@ -53,8 +53,11 @@ Hostapdjs.prototype.start = function(){
 	  '-B',
 	  this.config.path
   ].join(' ');
-
+  console.log(command);
   exec(command, function(err, stdout, stderr){
+	  console.log(stdout);
+	  console.log(stderr);
+	  console.log(err);
 	var log = parseHostapdBlock(stdout);
   });
 }
