@@ -75,6 +75,10 @@ Hostapdjs.prototype.start = function(){
 }
 
 Hostapdjs.prototype.stop = function(){
+  if(!pathExists.sync('/etc/hostapd/.pid')){
+  	return;
+  }
+
   var pid = fs.readFileSync('/etc/hostapd/.pid', 'utf8');
   if(pid.length > 0){
 	  var command = [
