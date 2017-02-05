@@ -38,7 +38,7 @@ Hostapdjs.prototype.updateConfig = function(){
       fs.writeFileSync('/etc/default/hostapd', 'DAEMON_CONF="' + config.path + '"', 'utf-8');
   }
 
-  fs.writeFileSync(config.path, createConfig(config), 'utf-8');
+  fs.writeFileSync(config.path, parseConfig(config), 'utf-8');
   this.config = config;
 }
 
