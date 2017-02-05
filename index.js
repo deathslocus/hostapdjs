@@ -44,10 +44,12 @@ Hostapdjs.prototype.updateConfig = function(){
 
 var parseHostapdBlock = function(log){
 	var bits = log.split('\n');
-	console.log(bits);
 	if(bits.length > 1){
-		return "Error";	
-		console.log(bits[3]);	
+		if(bits[1].indexOf("invalid WPA") > -1){
+			return "Invalid passphrase";
+		}else{
+			return "Generic error";
+		}
 	}else{
 		return;
 	}
@@ -67,7 +69,7 @@ Hostapdjs.prototype.start = function(){
 	if(!log){
 		console.log("HOSTAPD setup succesfully");
 	}else{
-		console.log("HOSTAPD ERROR");
+		console.log("HOSTAPD ERROR: " + log);
 	}
   });
 }
