@@ -44,7 +44,12 @@ Hostapdjs.prototype.updateConfig = function(){
 
 var parseHostapdBlock = function(log){
 	var bits = log.split('\n');
-	console.log(bits);
+	if(bits.length > 1){
+		return "Error";	
+		console.log(bits[3]);	
+	}else{
+		return;
+	}
 }
 
 Hostapdjs.prototype.start = function(){
@@ -55,10 +60,12 @@ Hostapdjs.prototype.start = function(){
   ].join(' ');
   console.log(command);
   exec(command, function(err, stdout, stderr){
-	  console.log(stdout);
-	  console.log(stderr);
-	  console.log(err);
 	var log = parseHostapdBlock(stdout);
+	if(!log){
+		console.log("HOSTAPD setup succesfully");
+	}else{
+		console.log("HOSTAPD ERROR");
+	}
   });
 }
 
