@@ -44,6 +44,7 @@ Hostapdjs.prototype.updateConfig = function(){
 
 var parseHostapdBlock = function(log){
 	var bits = log.split('\n');
+	console.log(bits);
 	if(bits.length > 1){
 		return "Error";	
 		console.log(bits[3]);	
