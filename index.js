@@ -56,9 +56,11 @@ Hostapdjs.prototype.start = function(){
   var command = [
 	  'hostapd',
 	  '-B',
+	  '-P',
+	  '/etc/hostapd/.pid',
 	  this.config.path
   ].join(' ');
-  console.log(command);
+
   exec(command, function(err, stdout, stderr){
 	var log = parseHostapdBlock(stdout);
 	if(!log){
@@ -70,7 +72,17 @@ Hostapdjs.prototype.start = function(){
 }
 
 Hostapdjs.prototype.stop = function(){
-
+  var pid = fs.readFileSync('/etc/hostapd/.pid', 'utf8');
+  if(pid.length > 0){
+	  var command = [
+		'kill',
+		pid
+	  ].join(' '); 
+	 exec(command, function(err, stdout, stderr){
+		console.log(stdout);
+		 console.log(stderr);
+	 }); 
+  }
 }
 
 var parseConfig = function(config){
