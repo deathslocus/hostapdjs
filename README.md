@@ -3,7 +3,7 @@
 ## Install
 
 ```bash
-npm i hostapdjs
+npm i https://github.com/deathslocus/hostapdjs
 ```
 
 ## Usage

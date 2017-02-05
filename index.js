@@ -87,6 +87,4 @@ var parseConfig = function(config){
    return write;
 }
 
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = Hostapdjs;
-
+module.exports = Hostapdjs;
