@@ -7,20 +7,6 @@ var exec = require("child_process").exec;
 
 function Hostapdjs(options){
    this.options = options;
-   return new Promise(function(resolve, reject){
-      if(!pathExists.sync('/etc/default/hostapd')){
-         reject('no default conf file was found for hostapd');
-      }
-      if(!options || typeof(options) !== 'object'){
-         reject("Provide a valid json object");
-      }
-      if(!options.interface){
-         reject("No configuration interface was provided");
-      }
-      if(!options.ssid){
-         reject("No configuration ssid was provided");
-      }
-   });
 }
 
 Hostapdjs.prototype.updateConfig = function(){ 
