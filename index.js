@@ -56,7 +56,7 @@ Hostapdjs.prototype.updateConfig = function(){
   this.config = config;
 }
 
-var parseHostapdBlock(log){
+var parseHostapdBlock = function(log){
 	var bits = log.split('\n');
 	console.log(bits);
 }
