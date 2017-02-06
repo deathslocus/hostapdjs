@@ -2,17 +2,13 @@
 var pathExists = require("path-exists");
 var fs = require("fs");
 var json_add_1 = require("json-add");
-var Promise = require("bluebird");
 var exec = require("child_process").exec;
+var initd = require('initd');
 
 function Hostapdjs(options){
-   this.options = options;
-}
+   this.options = options; 
 
-Hostapdjs.prototype.updateConfig = function(){ 
-  var options = this.options;
-
-  var config = {
+   var config = {
       path: '/etc/hostapd/hostapd.conf',
       driver: 'nl80211',
       hw_mode: 'g',
@@ -42,54 +38,18 @@ Hostapdjs.prototype.updateConfig = function(){
   this.config = config;
 }
 
-var parseHostapdBlock = function(log){
-	var bits = log.split('\n');
-	if(bits.length > 1){
-		if(bits[1].indexOf("invalid WPA") > -1){
-			return "Invalid passphrase";
-		}else{
-			return "Generic error";
-		}
-	}else{
-		return;
-	}
-}
-
 Hostapdjs.prototype.start = function(){
-  var command = [
-	  'hostapd',
-	  '-B',
-	  '-P',
-	  '/etc/hostapd/.pid',
-	  this.config.path
-  ].join(' ');
-
-  exec(command, function(err, stdout, stderr){
-	var log = parseHostapdBlock(stdout);
-	if(!log){
-		console.log("HOSTAPD setup succesfully");
-	}else{
-		console.log("HOSTAPD ERROR: " + log);
-	}
-  });
+   initd.restart('hostapd').on('close', function(code){
+      if(code !== 0) return console.log("Hostapd failed to restart");
+      console.log("Hostapd restarted");
+   });
 }
 
 Hostapdjs.prototype.stop = function(){
-  if(!pathExists.sync('/etc/hostapd/.pid')){
-  	return;
-  }
-
-  var pid = fs.readFileSync('/etc/hostapd/.pid', 'utf8');
-  if(pid.length > 0){
-	  var command = [
-		'kill',
-		pid
-	  ].join(' '); 
-	 exec(command, function(err, stdout, stderr){
-		console.log(stdout);
-		 console.log(stderr);
-	 }); 
-  }
+   initd.stop('hostapd').on('close', function(code){
+      if(code !== 0) return console.log("Hostapd failed to stop");
+      console.log("Hostapd stopped");
+   });
 }
 
 var parseConfig = function(config){
